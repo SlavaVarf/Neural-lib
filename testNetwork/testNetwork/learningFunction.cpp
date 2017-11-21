@@ -1,5 +1,14 @@
 #include "stdafx.h"
-//#include "learningFunction.h"
+#include "learningFunction.h"
+
+double gotWeights(double weight) {
+	return weight;
+}
+double setWeigth(double weight, double neuron,double delta, double lr) {
+double a = (weight - neuron*delta*lr);
+return a;
+}
+
 /*
 
 double weigts_delta(double actual,double expected) {
