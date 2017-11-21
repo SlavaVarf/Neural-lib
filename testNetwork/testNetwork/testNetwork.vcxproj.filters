@@ -21,7 +21,7 @@
     <ClInclude Include="targetver.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Downloads\Neural-20171121T150024Z-001\Neural\TestNetwork\TestNetwork\learningFunction.h">
+    <ClInclude Include="learningFunction.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="mainNeural.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Downloads\Neural-20171121T150024Z-001\Neural\TestNetwork\TestNetwork\learningFunction.cpp">
+    <ClCompile Include="learningFunction.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
