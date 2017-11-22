@@ -2,7 +2,7 @@
 #include "learningFunction.h"
 
 double wDelta;
-double learningRate;
+double learningRate=0.1;
 
 /* дельта для весов,которые идут к последнему слою */
 void weights_delta_last(double actual,double expected) {   
@@ -12,15 +12,22 @@ void weights_delta_last(double actual,double expected) {
 }
 
 /*новое значение весов,которые идут к последнему слою*/
-double new_weight_last(double valueOfNeu, double weightTo) {      
-	double new_weight = weightTo - valueOfNeu*wDelta*learningRate;
+double new_weight_last(double valueOfNeu, double weightFrom) {      
+	double new_weight = weightFrom - valueOfNeu*wDelta*learningRate;
 	return new_weight;
 }
 
-/*новое значение весов для предыдущих слоев*/
-double new_weight(double valueOfNeu, double weightFrom) {
+double error_of_neu(double weightFrom) {
 	double error = weightFrom*wDelta;
-	double new_weight = weightFrom - valueOfNeu*wDelta*learningRate; 
+	return error;
+}
+
+/*новое значение весов для предыдущих слоев*/
+double new_weight(double valueOfNeu, double weightTo,double error) {
+	
+	double sigmoidDX = valueOfNeu*(1 - valueOfNeu);
+	wDelta = error*sigmoidDX;
+	double new_weight = weightTo - valueOfNeu*wDelta*learningRate; 
 	return new_weight;
 }
 
