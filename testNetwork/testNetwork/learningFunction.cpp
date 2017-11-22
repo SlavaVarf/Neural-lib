@@ -3,21 +3,24 @@
 
 double wDelta;
 double learningRate;
-void weights_delta(double actual,double expected) {
+
+/* дельта для весов,которые идут к последнему слою */
+void weights_delta_last(double actual,double expected) {   
 	double error = actual - expected;					//2.1
 	double sigmoidDX = actual*(1 - actual);				//2.2*
      wDelta = error*sigmoidDX;							//2.2
 }
 
-double new_weight(double valueOfThisNeu,double valueOfPrevNeu) {
-	
-	double new_weight = valueOfThisNeu - valueOfPrevNeu*wDelta*learningRate; //2.3
+/*новое значение весов,которые идут к последнему слою*/
+double new_weight_last(double valueOfNeu, double weightTo) {      
+	double new_weight = weightTo - valueOfNeu*wDelta*learningRate;
 	return new_weight;
 }
 
-double new_valueOfNeu(double valueOfNeu,double weight) {
-	
-	double error = weight*wDelta;                                 //2.4
-	double newValue = valueOfNeu - weight*wDelta*learningRate;    //2.5
-	return newValue;
+/*новое значение весов для предыдущих слоев*/
+double new_weight(double valueOfNeu, double weightFrom) {
+	double error = weightFrom*wDelta;
+	double new_weight = weightFrom - valueOfNeu*wDelta*learningRate; 
+	return new_weight;
 }
+
