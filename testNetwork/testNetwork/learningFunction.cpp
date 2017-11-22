@@ -1,19 +1,33 @@
 #include "stdafx.h"
 #include "learningFunction.h"
 
-double gotWeights(double weight) {
-	return weight;
-}
-double setWeigth(double weight, double neuron,double delta, double lr) {
-double a = (weight - neuron*delta*lr);
-return a;
+double wDelta;
+double learningRate=0.1;
+
+/* дельта для весов,которые идут к последнему слою */
+void weights_delta_last(double actual,double expected) {   
+	double error = actual - expected;					//2.1
+	double sigmoidDX = actual*(1 - actual);				//2.2*
+     wDelta = error*sigmoidDX;							//2.2
 }
 
-/*
-
-double weigts_delta(double actual,double expected) {
-double error = actual - expected;                 //2.1
-double weights_delta = error*sweights.weights[CountOfNeurons - 1][CountOfNeurons - 1];
-return weigts_delta;
+/*новое значение весов,которые идут к последнему слою*/
+double new_weight_last(double valueOfNeu, double weightFrom) {      
+	double new_weight = weightFrom - valueOfNeu*wDelta*learningRate;
+	return new_weight;
 }
-*/
+
+double error_of_neu(double weightFrom) {
+	double error = weightFrom*wDelta;
+	return error;
+}
+
+/*новое значение весов для предыдущих слоев*/
+double new_weight(double valueOfNeu, double weightTo,double error) {
+	
+	double sigmoidDX = valueOfNeu*(1 - valueOfNeu);
+	wDelta = error*sigmoidDX;
+	double new_weight = weightTo - valueOfNeu*wDelta*learningRate; 
+	return new_weight;
+}
+
