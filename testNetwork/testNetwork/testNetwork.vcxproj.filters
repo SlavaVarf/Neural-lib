@@ -27,6 +27,9 @@
     <ClInclude Include="mainNeural.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="matrix.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -36,6 +39,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="learningFunction.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="matrix.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
