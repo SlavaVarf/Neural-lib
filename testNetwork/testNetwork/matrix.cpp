@@ -1,19 +1,31 @@
 #include "stdafx.h"
 #include "matrix.h"
 
-double **weights;
-int *layerStart;
-int neuronsNum = 0;
+/*void fileOpen(string path) {
+	ofstream file(path);
+}
+*/
+
+void fileWrite(string path, const char str[]) {
+	ofstream file;
+	file.open(path);
+	file << str;
+}
+
 
 void matrixCreation(int* neuronsPerLayer, int layersNum) {
+	ofstream weightsFile("weights.txt");
 	srand((unsigned)time(NULL));
+	int *layerStart;
+	int neuronsNum = 0;
+	double **weights;
 	layerStart = new int[layersNum];														//избавиться от дин массивов
 	for (int i = 0; i < layersNum; i++) {
 		layerStart[i] = neuronsNum;
 		neuronsNum += neuronsPerLayer[i];
 		cout << "layer " << i + 1 << " starting is " << layerStart[i] << " index" << endl;
 	}
-	double **weights = new double*[neuronsNum];
+	weights = new double*[neuronsNum];
 	for (int i = 0; i < neuronsNum; i++) {
 		weights[i] = new double[i + 1];
 		for (int j = 0; j < i + 1; j++) {
@@ -33,14 +45,16 @@ void matrixCreation(int* neuronsPerLayer, int layersNum) {
 	for (int i = 0; i < neuronsNum; i++) {
 		for (int j = 0; j < i + 1; j++) {
 			cout << weights[i][j] << "\t";
+			weightsFile << weights[i][j] << "\t";
 		}
+		weightsFile << "\n";
 		cout << endl;
 	}
 	cout << endl;
-	cout << weights[0][0];
+
 }
 
-void forwardWay(int* inputLayer, int* neuronsPerLayer, int layersNum) {
+/*void forwardWay(int* inputLayer, int* neuronsPerLayer, int layersNum) {
 	for (int i = 0; i < layerStart[1]; i++) {
 		cout << weights[0][0];
 		weights[i][i] = inputLayer[i];
@@ -60,3 +74,4 @@ double getWeight(int fNeuron, int tneuron) {						// from/to neuron
 void setWeight(int fNeuron, int tNeuron, double value) {			// from/to neuron
 	weights[tNeuron][fNeuron] = value;
 }
+*/
