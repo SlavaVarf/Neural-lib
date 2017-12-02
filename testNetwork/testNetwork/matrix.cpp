@@ -1,10 +1,17 @@
 #include "stdafx.h"
 #include "matrix.h"
+#include <iomanip>
 
 /*void fileOpen(string path) {
 	ofstream file(path);
 }
 */
+void searchInFile(string name, int rows, int cols) {
+	char str[256];
+	ifstream file(name);
+	file.getline(str, 255, '\n');
+	cout << str;
+}
 
 void fileWrite(string path, const char str[]) {
 	ofstream file;
@@ -12,6 +19,11 @@ void fileWrite(string path, const char str[]) {
 	file << str;
 }
 
+/*void file() {
+	ofstream file("sas.txt");
+	file << "sas";
+}
+*/
 
 void matrixCreation(int* neuronsPerLayer, int layersNum) {
 	ofstream weightsFile("weights.txt");
@@ -44,17 +56,16 @@ void matrixCreation(int* neuronsPerLayer, int layersNum) {
 	cout << endl;
 	for (int i = 0; i < neuronsNum; i++) {
 		for (int j = 0; j < i + 1; j++) {
-			cout << weights[i][j] << "\t";
-			weightsFile << weights[i][j] << "\t";
+			cout << fixed << weights[i][j] << "\t";
+			weightsFile << fixed << weights[i][j] << "\t";
 		}
 		weightsFile << "\n";
 		cout << endl;
 	}
 	cout << endl;
-
 }
-
-/*void forwardWay(int* inputLayer, int* neuronsPerLayer, int layersNum) {
+/*
+void forwardWay(int* inputLayer, int* neuronsPerLayer, int layersNum) {
 	for (int i = 0; i < layerStart[1]; i++) {
 		cout << weights[0][0];
 		weights[i][i] = inputLayer[i];
