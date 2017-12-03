@@ -2,24 +2,25 @@
 #include "matrix.h"
 #include <iomanip>
 
+
 /*void fileOpen(string path) {
 	ofstream file(path);
 }
 */
-void searchInFile(string name, int rows, int cols) {
+/*void searchInFile(string name, int rows, int cols) {
 	char str[256];
 	ifstream file(name);
 	file.getline(str, 255, '\n');
 	cout << str;
 }
 
-void fileWrite(string path, const char str[]) {
+/*void fileWrite(string path, const char str[]) {
 	ofstream file;
 	file.open(path);
 	file << str;
 }
 
-/*void file() {
+void file() {
 	ofstream file("sas.txt");
 	file << "sas";
 }
@@ -63,7 +64,32 @@ void matrixCreation(int* neuronsPerLayer, int layersNum) {
 		cout << endl;
 	}
 	cout << endl;
+
+	searchInFile(1, 1);
+
 }
+
+void searchInFile(int row, int col) {
+	setlocale(LC_ALL, "rus");
+	char buff[256];
+	ifstream fin("weights.txt"); //открыли файл для чтения
+	for (int i = 0;i < row;i++) {
+		fin.getline(buff, 256);  //считываем строку
+	}
+	cout <<"строка: "<< buff<<endl; //проверка
+	char element[9];
+
+	int start = 8 * (col-1) + 4 * (col - 1); //начало нужного эл-та
+	int k = 0;
+	for (int j = start;j < 8;j++) {
+		element[k] = buff[j];
+		k += 1;
+	}
+
+	cout << "элемент: " << element << endl; //проверка
+
+}
+
 /*
 void forwardWay(int* inputLayer, int* neuronsPerLayer, int layersNum) {
 	for (int i = 0; i < layerStart[1]; i++) {
