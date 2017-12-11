@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 
 
 //void fileWrite(string path, const char str[]);

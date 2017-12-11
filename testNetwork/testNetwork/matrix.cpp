@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "matrix.h"
-#include <iomanip>
 
 
 /*void fileOpen(string path) {
@@ -64,29 +63,51 @@ void matrixCreation(int* neuronsPerLayer, int layersNum) {
 		cout << endl;
 	}
 	cout << endl;
-
-	searchInFile(1, 1);
+	weightsFile.close();
+	searchInFile(2, 1);
 
 }
 
 void searchInFile(int row, int col) {
+	/*
 	setlocale(LC_ALL, "rus");
 	char buff[256];
-	ifstream fin("weights.txt"); //открыли файл для чтения
-	for (int i = 0;i < row;i++) {
-		fin.getline(buff, 256);  //считываем строку
+	ifstream fin("weights.txt");					//открыли файл для чтения
+	for (int i = 0; i <= row; i++) {
+		fin.getline(buff, 256, '\n');				//считываем строку
 	}
-	cout <<"строка: "<< buff<<endl; //проверка
-	char element[9];
+	cout << "строка: " << buff << endl;				//проверка
+	char element[8];
+	int k = 0, m = 0;
+	for (int i = 0; i < 256; i++) {
+		if (buff[i] == '\t')
+			k++;
+		if (k == col) {
+			for (int j = i; j < i + 8; j++) {
+				element[m] = buff[j + 1];
+				m++;
+			}
+			i = 256;
+		}
 
+	}
+	*/
+
+	/*
 	int start = 8 * (col-1) + 4 * (col - 1); //начало нужного эл-та
 	int k = 0;
 	for (int j = start;j < 8;j++) {
 		element[k] = buff[j];
 		k += 1;
 	}
+	*/
+	/*
+	double value = 0;
+	value = atof(element);
+	cout << value << endl;
+	*/
 
-	cout << "элемент: " << element << endl; //проверка
+	 //проверка
 
 }
 
