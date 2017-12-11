@@ -43,17 +43,43 @@ int neuronsCounter(int* neuronsPerLayer, int layersNum) {
 		neuronsNum += neuronsPerLayer[i];
 	}
 	return neuronsNum;
-}															//продумать устройство forwardway
-/*
-void forwardWay(double** weights, int* inputLayer, int* neuronsPerLayer, int layersNum) {
-	for (int i = 0; i < neuronsPerLayer[i]; i++) {
-		weights[i][i] = inputLayer[i];
+}															
+double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum, double expected) {
+	int *layerStart = new int[layersNum];
+	layerStart[0] = 0;
+	for (int i = 1; i < layersNum; i++) {
+		layerStart[i] = layerStart[i - 1] + neuronsPerLayer[i - 1];
+		for (int k = 0; k < neuronsPerLayer[i]; k++) {
+			weights[layerStart[i] + k][layerStart[i] + k] = 0;
+			for (int j = 0; j < neuronsPerLayer[i - 1]; j++)
+				weights[layerStart[i] + k][layerStart[i] + k] += weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * weights[neuronsPerLayer[i - 1] + k][layerStart[i - 1] + j];
+			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
+		}
+
 	}
-	for (int i = 2; i <= layersNum; i++)
-		for (int j = layerStart[i - 1]; j < layerStart[i - 1] + neuronsPerLayer[i - 1]; j++)
-			for (int k = layerStart[i - 2]; k < layerStart[i - 2] + neuronsPerLayer[i - 2]; k++) {
-				weights[j][j] = weights[j][j] + weights[j][j - 1] * weights[j - 1][j - 1];
-				cout << "[" << j << "][" << j << "]=" << weights[j][j] << endl;
-			}
+	backWay(weights, neuronsPerLayer, layersNum, expected, layerStart, 0.1);
+	return weights;
 }
-*/
+double ** backWay(double** weights, int* neuronsPerLayer, int layersNum, double expected, int* layerStart, double learningRate){
+	double error = weights[layerStart[layersNum - 1]][layerStart[layersNum - 1]] - expected;			//берём ошибку последнего нейрона
+	for (int i = layersNum - 1; i > 0; i--)																//начиная с последнего слоя спускаемся к первому
+		for (int j = layerStart[i] + neuronsPerLayer[i]; j > layerStart[i]; j--) {						//для каждого нейрона в этом слое
+			double weightsDelta = error*sigm(weights[j - 1][j - 1])*(1 - sigm(weights[j - 1][j - 1]));  //считаем ошибку
+			for (int k = layerStart[i - 1] + neuronsPerLayer[i - 1]; k > layerStart[i - 1]; k--)		//в окне вывода видно, что все эти сигмоиды нормально считаются
+				weights[k][k - 1] -= weights[k - 1][k - 1] * weightsDelta*learningRate;					//корректируем все веса, которые ведут к этому нейрону
+		}
+	return weights;																						//возвращаем матрицу в forwardWay
+}
+
+double sigm(double x) {
+	cout << "prev " << x << "\n";
+	double sigm = (1 / (1 + exp(-x)));
+	cout << "aft " << sigm << "\n";
+	return sigm;
+}
+
+double answer(double x) {
+	if (x > 0.5)
+		return true;
+	else return false;
+}
