@@ -4,6 +4,7 @@
 double wDelta;
 double learningRate=0.1;
 
+//double ** learningEpoch(double ** weights, int * input layer)					//подумать про обучение
 /* дельта для весов,которые идут к последнему слою */
 void weights_delta_last(double actual,double expected) {   
 	double error = actual - expected;					//2.1
