@@ -2,18 +2,19 @@
 #include "learningFunction.h"
 
 double wDelta;
-double learningRate=0.1;
+double learningRate = 0.2;
 
 //double ** learningEpoch(double ** weights, int * input layer)					//подумать про обучение
 /* дельта для весов,которые идут к последнему слою */
-void weights_delta_last(double actual,double expected) {   
+void weights_delta_last(double actual, double expected) {
 	double error = actual - expected;					//2.1
 	double sigmoidDX = actual*(1 - actual);				//2.2*
-     wDelta = error*sigmoidDX;							//2.2
+	wDelta = error*sigmoidDX;		//2.2
+
 }
 
 /*новое значение весов,которые идут к последнему слою*/
-double new_weight_last(double valueOfNeu, double weightFrom) {      
+double new_weight_last(double valueOfNeu, double weightFrom) {      //valueOfNeu-значение нейрона,от которого идет вес weightFrom
 	double new_weight = weightFrom - valueOfNeu*wDelta*learningRate;
 	return new_weight;
 }
@@ -24,11 +25,10 @@ double error_of_neu(double weightFrom) {
 }
 
 /*новое значение весов для предыдущих слоев*/
-double new_weight(double valueOfNeu, double weightTo,double error) {
-	
+double new_weight(double valueOfNeu, double weightTo, double error) {
+
 	double sigmoidDX = valueOfNeu*(1 - valueOfNeu);
 	wDelta = error*sigmoidDX;
-	double new_weight = weightTo - valueOfNeu*wDelta*learningRate; 
+	double new_weight = weightTo - valueOfNeu*wDelta*learningRate;
 	return new_weight;
 }
-
