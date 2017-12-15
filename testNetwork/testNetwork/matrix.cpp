@@ -61,7 +61,7 @@ double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum, doub
 		}
 	}
 	//backWay(weights, neuronsPerLayer, layersNum, expected, layerStart, 0.1);
-	backWay(weights, weights[neuronsPerLayer[2]][neuronsPerLayer[2]], expected, layersNum, layerStart);
+	backWay(weights, weights[layerStart[layersNum - 1]][layerStart[layersNum - 1]], expected, layersNum, layerStart);
 	return weights;
 }
 
@@ -74,12 +74,13 @@ double **backWay(double**weights, double actual, double expected, int layersNum,
 
 	double error;
 
-	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++)
+	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
 		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
-	for (int k = layersNum - 2; k>0; k--)
-		for (int m = layerStart[k]; m<layerStart[k + 1]; m++)
-			for (int j = layerStart[k - 1]; j<layerStart[k]; j++)
-				new_weight(weights[m][m], weights[m][j], error);
+		for (int k = layersNum - 2; k > 0; k--)
+			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)
+				for (int j = layerStart[k - 1]; j < layerStart[k]; j++)
+					weights[m][j] = new_weight(weights[m][m], weights[m][j], error);
+	}
 	return weights;
 
 }

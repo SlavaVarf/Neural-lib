@@ -2,7 +2,7 @@
 #include "learningFunction.h"
 
 double wDelta;
-double learningRate = 0.2;
+double learningRate = 0.5;
 
 //double ** learningEpoch(double ** weights, int * input layer)					//подумать про обучение
 /* дельта для весов,которые идут к последнему слою */
