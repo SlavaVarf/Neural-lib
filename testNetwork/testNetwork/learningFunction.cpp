@@ -14,7 +14,7 @@ void weights_delta_last(double actual, double expected) {
 }
 
 /*новое значение весов,которые идут к последнему слою*/
-double new_weight_last(double valueOfNeu, double weightFrom) {      //valueOfNeu-значение нейрона,от которого идет вес weightFrom
+double new_weight_last(double valueOfNeu, double weightFrom) {      //valueOfNeu-значение нейрона,от которого идет вес weightFrom.
 	double new_weight = weightFrom - valueOfNeu*wDelta*learningRate;
 	return new_weight;
 }
