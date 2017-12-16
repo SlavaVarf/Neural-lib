@@ -4,7 +4,7 @@
 
 double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 	srand((unsigned)time(NULL));
-	int *layerStart;							//номера нейронов,с которых начинается каждый слой
+	int *layerStart;							//Г­Г®Г¬ГҐГ°Г  Г­ГҐГ©Г°Г®Г­Г®Гў,Г± ГЄГ®ГІГ®Г°Г»Гµ Г­Г Г·ГЁГ­Г ГҐГІГ±Гї ГЄГ Г¦Г¤Г»Г© Г±Г«Г®Г©
 	int neuronsNum = 0;
 	double **weights;
 	layerStart = new int[layersNum];
@@ -13,14 +13,14 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 		neuronsNum += neuronsPerLayer[i];
 	}
 
-	weights = new double*[neuronsNum];			//создание нижнетреугольной матрицы
+	weights = new double*[neuronsNum];			//Г±Г®Г§Г¤Г Г­ГЁГҐ Г­ГЁГ¦Г­ГҐГІГ°ГҐГіГЈГ®Г«ГјГ­Г®Г© Г¬Г ГІГ°ГЁГ¶Г»
 	for (int i = 0; i < neuronsNum; i++) {
 		weights[i] = new double[i + 1];
 		for (int j = 0; j < i + 1; j++)
 			weights[i][j] = 0;
 	}
 
-	for (int i = 0; i < layersNum - 1; i++)		 //задаем весам рандомные значения
+	for (int i = 0; i < layersNum - 1; i++)		 //Г§Г Г¤Г ГҐГ¬ ГўГҐГ±Г Г¬ Г°Г Г­Г¤Г®Г¬Г­Г»ГҐ Г§Г­Г Г·ГҐГ­ГЁГї
 		for (int k = layerStart[i]; k < layerStart[i] + neuronsPerLayer[i]; k++)
 			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + neuronsPerLayer[i + 1]; j++)
 				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0;
@@ -29,7 +29,7 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 	return weights;
 }
 
-void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запись матрицы в файл
+void writeToFile(string fileName, double **matrix, int neuronsNum) {  //Г§Г ГЇГЁГ±Гј Г¬Г ГІГ°ГЁГ¶Г» Гў ГґГ Г©Г«
 	ofstream file(fileName);
 	for (int i = 0; i < neuronsNum; i++) {
 		for (int j = 0; j < i + 1; j++)
@@ -40,7 +40,7 @@ void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запись м
 
 };
 
-int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и возвращающая общее кол-во нейронов
+int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //Гґ-ГЁГї,Г±Г·ГЁГІГ ГѕГ№Г Гї ГЁ ГўГ®Г§ГўГ°Г Г№Г ГѕГ№Г Гї Г®ГЎГ№ГҐГҐ ГЄГ®Г«-ГўГ® Г­ГҐГ©Г°Г®Г­Г®Гў.
 	int neuronsNum = 0;
 	for (int i = 0; i < layersNum; i++) {
 		neuronsNum += neuronsPerLayer[i];
@@ -48,7 +48,14 @@ int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и во
 	return neuronsNum;
 }
 
-double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum, double expected) {     //прямой проход
+double** learning(double** weights, int* neuronsPerLayer, int layersNum, double expected) {
+	
+	weights=forwardWay(weights, neuronsPerLayer, layersNum );
+	weights=backWay(weights, weights[neuronsPerLayer[2]][neuronsPerLayer[2]], expected, layersNum, layerStart);
+	return weights;
+}
+
+double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {     //ГЇГ°ГїГ¬Г®Г© ГЇГ°Г®ГµГ®Г¤
 	int *layerStart = new int[layersNum];
 	layerStart[0] = 0;
 	for (int i = 1; i < layersNum; i++) {
@@ -60,8 +67,6 @@ double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum, doub
 			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
-	//backWay(weights, neuronsPerLayer, layersNum, expected, layerStart, 0.1);
-	backWay(weights, weights[layerStart[layersNum - 1]][layerStart[layersNum - 1]], expected, layersNum, layerStart);
 	return weights;
 }
 
@@ -84,17 +89,26 @@ double **backWay(double**weights, double actual, double expected, int layersNum,
 	return weights;
 
 }
-/*double ** backWay(double** weights, int* neuronsPerLayer, int layersNum, double expected, int* layerStart, double learningRate){
-double error = weights[layerStart[layersNum - 1]][layerStart[layersNum - 1]] - expected;			//берём ошибку последнего нейрона
-for (int i = layersNum - 1; i > 0; i--)																//начиная с последнего слоя спускаемся к первому
-for (int j = layerStart[i] + neuronsPerLayer[i]; j > layerStart[i]; j--) {						//для каждого нейрона в этом слое
-double weightsDelta = error*sigm(weights[j - 1][j - 1])*(1 - sigm(weights[j - 1][j - 1]));  //считаем ошибку
-for (int k = layerStart[i - 1] + neuronsPerLayer[i - 1]; k > layerStart[i - 1]; k--)		//в окне вывода видно, что все эти сигмоиды нормально считаются
-weights[k][k - 1] -= weights[k - 1][k - 1] * weightsDelta*learningRate;					//корректируем все веса, которые ведут к этому нейрону
+
+void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
+	int value1;
+	int value2;
+	cout << "Enter 1 input value: ";
+	cin >> value1;
+	weights[0][0] = value1;
+	cout << "Enter 2 input value: ";
+	cin >> value2;
+	weights[1][1] = value2;
+
+	weights=forwardWay(weights,neuronsPerLayer,layersNum);
+
+	int expected=0;
+	if ((value1 == 1)||(value2 == 1)) {
+		expected = 1;
+	}
+	cout << "Expexted answer: "<<expected<<endl;
+	cout << "Actual answer: " << answer(weights[neuronsPerLayer[2]][neuronsPerLayer[2]])<<endl;
 }
-return weights;																						//возвращаем матрицу в forwardWay
-}
-*/
 
 double sigm(double x) {
 	cout << "prev " << x << "\n";
