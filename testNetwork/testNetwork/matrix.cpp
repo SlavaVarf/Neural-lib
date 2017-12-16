@@ -4,7 +4,7 @@
 
 double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 	srand((unsigned)time(NULL));
-	int *layerStart;							//íîìåðà íåéðîíîâ,ñ êîòîðûõ íà÷èíàåòñÿ êàæäûé ñëîé
+	int *layerStart;							//номера нейронов,с которых начинается каждый слой
 	int neuronsNum = 0;
 	double **weights;
 	layerStart = new int[layersNum];
@@ -13,14 +13,14 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 		neuronsNum += neuronsPerLayer[i];
 	}
 
-	weights = new double*[neuronsNum];			//ñîçäàíèå íèæíåòðåóãîëüíîé ìàòðèöû
+	weights = new double*[neuronsNum];			//создание нижнетреугольной матрицы
 	for (int i = 0; i < neuronsNum; i++) {
 		weights[i] = new double[i + 1];
 		for (int j = 0; j < i + 1; j++)
 			weights[i][j] = 0;
 	}
 
-	for (int i = 0; i < layersNum - 1; i++)		 //çàäàåì âåñàì ðàíäîìíûå çíà÷åíèÿ
+	for (int i = 0; i < layersNum - 1; i++)		 //задаем весам рандомные значения
 		for (int k = layerStart[i]; k < layerStart[i] + neuronsPerLayer[i]; k++)
 			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + neuronsPerLayer[i + 1]; j++)
 				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0;
@@ -29,7 +29,7 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 	return weights;
 }
 
-void writeToFile(string fileName, double **matrix, int neuronsNum) {  //çàïèñü ìàòðèöû â ôàéë
+void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запись матрицы в файл
 	ofstream file(fileName);
 	for (int i = 0; i < neuronsNum; i++) {
 		for (int j = 0; j < i + 1; j++)
@@ -40,7 +40,7 @@ void writeToFile(string fileName, double **matrix, int neuronsNum) {  //çàïè
 
 };
 
-int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ô-èÿ,ñ÷èòàþùàÿ è âîçâðàùàþùàÿ îáùåå êîë-âî íåéðîíîâ.
+int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и возвращающая общее кол-во нейронов.
 	int neuronsNum = 0;
 	for (int i = 0; i < layersNum; i++) {
 		neuronsNum += neuronsPerLayer[i];
@@ -49,13 +49,13 @@ int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ô-èÿ,ñ÷èòà�
 }
 
 double** learning(double** weights, int* neuronsPerLayer, int layersNum, double expected) {
-	
-	weights=forwardWay(weights, neuronsPerLayer, layersNum );
-	weights=backWay(weights, weights[neuronsPerLayer[2]][neuronsPerLayer[2]], expected, layersNum, layerStart);
+
+	weights = forwardWay(weights, neuronsPerLayer, layersNum);
+	weights = backWay(weights, weights[neuronsPerLayer[2]][neuronsPerLayer[2]], expected, layersNum, layerStart);
 	return weights;
 }
 
-double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {     //ïðÿìîé ïðîõîä
+double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {     //прямой проход
 	int *layerStart = new int[layersNum];
 	layerStart[0] = 0;
 	for (int i = 1; i < layersNum; i++) {
@@ -79,13 +79,12 @@ double **backWay(double**weights, double actual, double expected, int layersNum,
 
 	double error;
 
-	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
+	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++)
 		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
-		for (int k = layersNum - 2; k > 0; k--)
-			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)
-				for (int j = layerStart[k - 1]; j < layerStart[k]; j++)
-					weights[m][j] = new_weight(weights[m][m], weights[m][j], error);
-	}
+	for (int k = layersNum - 2; k>0; k--)
+		for (int m = layerStart[k]; m<layerStart[k + 1]; m++)
+			for (int j = layerStart[k - 1]; j<layerStart[k]; j++)
+				new_weight(weights[m][m], weights[m][j], error);
 	return weights;
 
 }
@@ -100,14 +99,14 @@ void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 	cin >> value2;
 	weights[1][1] = value2;
 
-	weights=forwardWay(weights,neuronsPerLayer,layersNum);
+	weights = forwardWay(weights, neuronsPerLayer, layersNum);
 
-	int expected=0;
-	if ((value1 == 1)||(value2 == 1)) {
+	int expected = 0;
+	if ((value1 == 1) || (value2 == 1)) {
 		expected = 1;
 	}
-	cout << "Expexted answer: "<<expected<<endl;
-	cout << "Actual answer: " << answer(weights[neuronsPerLayer[2]][neuronsPerLayer[2]])<<endl;
+	cout << "Expexted answer: " << expected << endl;
+	cout << "Actual answer: " << answer(weights[neuronsPerLayer[2]][neuronsPerLayer[2]]) << endl;
 }
 
 double sigm(double x) {
