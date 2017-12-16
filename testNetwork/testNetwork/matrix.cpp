@@ -4,7 +4,7 @@
 
 double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 	srand((unsigned)time(NULL));
-	int *layerStart;							//номера нейронов,с которых начинается каждый слой
+	int *layerStart;							//Г­Г®Г¬ГҐГ°Г  Г­ГҐГ©Г°Г®Г­Г®Гў,Г± ГЄГ®ГІГ®Г°Г»Гµ Г­Г Г·ГЁГ­Г ГҐГІГ±Гї ГЄГ Г¦Г¤Г»Г© Г±Г«Г®Г©
 	int neuronsNum = 0;
 	double **weights;
 	layerStart = new int[layersNum];
@@ -13,14 +13,14 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 		neuronsNum += neuronsPerLayer[i];
 	}
 
-	weights = new double*[neuronsNum];			//создание нижнетреугольной матрицы
+	weights = new double*[neuronsNum];			//Г±Г®Г§Г¤Г Г­ГЁГҐ Г­ГЁГ¦Г­ГҐГІГ°ГҐГіГЈГ®Г«ГјГ­Г®Г© Г¬Г ГІГ°ГЁГ¶Г»
 	for (int i = 0; i < neuronsNum; i++) {
 		weights[i] = new double[i + 1];
 		for (int j = 0; j < i + 1; j++)
 			weights[i][j] = 0;
 	}
 
-	for (int i = 0; i < layersNum - 1; i++)		 //задаем весам рандомные значения
+	for (int i = 0; i < layersNum - 1; i++)		 //Г§Г Г¤Г ГҐГ¬ ГўГҐГ±Г Г¬ Г°Г Г­Г¤Г®Г¬Г­Г»ГҐ Г§Г­Г Г·ГҐГ­ГЁГї
 		for (int k = layerStart[i]; k < layerStart[i] + neuronsPerLayer[i]; k++)
 			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + neuronsPerLayer[i + 1]; j++)
 				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0;
@@ -29,7 +29,7 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 	return weights;
 }
 
-void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запись матрицы в файл
+void writeToFile(string fileName, double **matrix, int neuronsNum) {  //Г§Г ГЇГЁГ±Гј Г¬Г ГІГ°ГЁГ¶Г» Гў ГґГ Г©Г«
 	ofstream file(fileName);
 	for (int i = 0; i < neuronsNum; i++) {
 		for (int j = 0; j < i + 1; j++)
@@ -40,7 +40,7 @@ void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запись м
 
 };
 
-int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и возвращающая общее кол-во нейронов.
+int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //Гґ-ГЁГї,Г±Г·ГЁГІГ ГѕГ№Г Гї ГЁ ГўГ®Г§ГўГ°Г Г№Г ГѕГ№Г Гї Г®ГЎГ№ГҐГҐ ГЄГ®Г«-ГўГ® Г­ГҐГ©Г°Г®Г­Г®Гў.
 	int neuronsNum = 0;
 	for (int i = 0; i < layersNum; i++) {
 		neuronsNum += neuronsPerLayer[i];
@@ -55,7 +55,7 @@ double** learning(double** weights, int* neuronsPerLayer, int layersNum, double 
 	return weights;
 }
 
-double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {     //прямой проход
+double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {     //ГЇГ°ГїГ¬Г®Г© ГЇГ°Г®ГµГ®Г¤
 	int *layerStart = new int[layersNum];
 	layerStart[0] = 0;
 	for (int i = 1; i < layersNum; i++) {
@@ -79,12 +79,13 @@ double **backWay(double**weights, double actual, double expected, int layersNum,
 
 	double error;
 
-	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++)
+	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
 		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
-	for (int k = layersNum - 2; k>0; k--)
-		for (int m = layerStart[k]; m<layerStart[k + 1]; m++)
-			for (int j = layerStart[k - 1]; j<layerStart[k]; j++)
-				new_weight(weights[m][m], weights[m][j], error);
+		for (int k = layersNum - 2; k > 0; k--)
+			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)
+				for (int j = layerStart[k - 1]; j < layerStart[k]; j++)
+					weights[m][j] = new_weight(weights[m][m], weights[m][j], error);
+	}
 	return weights;
 
 }
