@@ -40,7 +40,7 @@ void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запись м
 
 };
 
-int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и возвращающая общее кол-во нейронов
+int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и возвращающая общее кол-во нейронов.
 	int neuronsNum = 0;
 	for (int i = 0; i < layersNum; i++) {
 		neuronsNum += neuronsPerLayer[i];
