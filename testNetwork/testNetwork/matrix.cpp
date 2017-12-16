@@ -56,7 +56,7 @@ double ** cycle(double** weights, int* neuronsPerLayer, int layersNum) {     //�
 		for (int k = 0; k < neuronsPerLayer[i]; k++) {
 			weights[layerStart[i] + k][layerStart[i] + k] = 0;
 			for (int j = 0; j < neuronsPerLayer[i - 1]; j++)
-				weights[layerStart[i] + k][layerStart[i] + k] += weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * weights[neuronsPerLayer[i - 1] + k][layerStart[i - 1] + j];
+				weights[layerStart[i] + k][layerStart[i] + k] += weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * weights[layerStart[i] + k][layerStart[i - 1] + j];//самый последний вес на месте ли?
 			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
@@ -71,28 +71,28 @@ double ** cycle(double** weights, int* neuronsPerLayer, int layersNum, double ex
 		for (int k = 0; k < neuronsPerLayer[i]; k++) {
 			weights[layerStart[i] + k][layerStart[i] + k] = 0;
 			for (int j = 0; j < neuronsPerLayer[i - 1]; j++)
-				weights[layerStart[i] + k][layerStart[i] + k] += weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * weights[neuronsPerLayer[i - 1] + k][layerStart[i - 1] + j];
+				weights[layerStart[i] + k][layerStart[i] + k] += weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * weights[layerStart[i] + k][layerStart[i - 1] + j];//самый последний вес на месте ли?
 			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
-	weights = backWay(weights, weights[neuronsPerLayer[layersNum - 1]][neuronsPerLayer[layersNum - 1]], expected, layersNum, layerStart);
+	weights = backWay(weights, weights[layerStart[layersNum-1]][layerStart[layersNum-1]], expected, layersNum, layerStart);// правильно ли передаётся?
 	return weights;
 }
 
 double **backWay(double**weights, double actual, double expected, int layersNum, int* layerStart) {
 	weights_delta_last(actual, expected);
 	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
-		weights[layerStart[layersNum - 1]][i] = new_weight_last(weights[i][i], weights[layerStart[layersNum - 1]][i]);
+		weights[layerStart[layersNum - 1]][i] = new_weight_last(weights[i][i], weights[layerStart[layersNum - 1]][i]); //можно загнать в цикл снизу?
 	}
 
 	double error;
 
 	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++)
-		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
+		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);//надо расширить цикл до конца??
 	for (int k = layersNum - 2; k>0; k--)
 		for (int m = layerStart[k]; m<layerStart[k + 1]; m++)
 			for (int j = layerStart[k - 1]; j<layerStart[k]; j++)
-				new_weight(weights[m][m], weights[m][j], error);
+				new_weight(weights[m][m], weights[m][j], error); //присвоить значение
 	return weights;
 
 }
