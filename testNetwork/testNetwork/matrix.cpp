@@ -89,7 +89,7 @@ double **backWay(double**weights, double actual, double expected, int layersNum,
 
 }
 
-double exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
+void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 	int value1;
 	int value2;
 	cout << "Enter 1 input value: ";
@@ -106,7 +106,7 @@ double exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 		expected = 1;
 	}
 	cout << "Expexted answer: "<<expected<<endl;
-	cout << "Actual answer: " << answer(weights[neuronsPerLayer[2]][neuronsPerLayer[2]])<endl;
+	cout << "Actual answer: " << answer(weights[neuronsPerLayer[2]][neuronsPerLayer[2]])<<endl;
 }
 
 double sigm(double x) {
