@@ -48,14 +48,7 @@ int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,счита�
 	return neuronsNum;
 }
 
-double** learning(double** weights, int* neuronsPerLayer, int layersNum, double expected) {
-
-	weights = forwardWay(weights, neuronsPerLayer, layersNum);
-	weights = backWay(weights, weights[neuronsPerLayer[2]][neuronsPerLayer[2]], expected, layersNum, layerStart);
-	return weights;
-}
-
-double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {     //прямой проход
+double ** cycle(double** weights, int* neuronsPerLayer, int layersNum) {     //прямой проход
 	int *layerStart = new int[layersNum];
 	layerStart[0] = 0;
 	for (int i = 1; i < layersNum; i++) {
@@ -70,8 +63,23 @@ double ** forwardWay(double** weights, int* neuronsPerLayer, int layersNum) {   
 	return weights;
 }
 
-double **backWay(double**weights, double actual, double expected, int layersNum, int* layerStart) {
+double ** cycle(double** weights, int* neuronsPerLayer, int layersNum, double expected) {     //прямой проход
+	int *layerStart = new int[layersNum];
+	layerStart[0] = 0;
+	for (int i = 1; i < layersNum; i++) {
+		layerStart[i] = layerStart[i - 1] + neuronsPerLayer[i - 1];
+		for (int k = 0; k < neuronsPerLayer[i]; k++) {
+			weights[layerStart[i] + k][layerStart[i] + k] = 0;
+			for (int j = 0; j < neuronsPerLayer[i - 1]; j++)
+				weights[layerStart[i] + k][layerStart[i] + k] += weights[layerStart[i - 1] + j][layerStart[i - 1] + j] * weights[neuronsPerLayer[i - 1] + k][layerStart[i - 1] + j];
+			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
+		}
+	}
+	weights = backWay(weights, weights[neuronsPerLayer[layersNum - 1]][neuronsPerLayer[layersNum - 1]], expected, layersNum, layerStart);
+	return weights;
+}
 
+double **backWay(double**weights, double actual, double expected, int layersNum, int* layerStart) {
 	weights_delta_last(actual, expected);
 	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
 		weights[layerStart[layersNum - 1]][i] = new_weight_last(weights[i][i], weights[layerStart[layersNum - 1]][i]);
@@ -99,7 +107,7 @@ void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 	cin >> value2;
 	weights[1][1] = value2;
 
-	weights = forwardWay(weights, neuronsPerLayer, layersNum);
+	weights = cycle(weights, neuronsPerLayer, layersNum);
 
 	int expected = 0;
 	if ((value1 == 1) || (value2 == 1)) {

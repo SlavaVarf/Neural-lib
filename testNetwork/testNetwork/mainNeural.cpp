@@ -3,7 +3,7 @@
 #include "mainNeural.h"
 #include "matrix.h"
 const int N = 4;
-const int eduBase[N][3] = { { 1,0,1 },{ 1,1,1 },{ 0,1,1 },{ 0,0,0 } };
+const int eduBase[4][3] = { { 1,0,1 },{ 1,1,1 },{ 0,1,1 },{ 0,0,0 } };
 void main() {
 	int expected;
 	double **weights;
@@ -11,13 +11,14 @@ void main() {
 	int layersNum = 3, neuronsNum = 0;
 	neuronsNum = neuronsCounter(neuronsPerLayer, layersNum);
 	weights = matrixCreation(neuronsPerLayer, layersNum);
-	for (int i = 0; i < N; i++) {
-		cout << "epoch #" << i << "\t" << "Enter inputs" << "\n";
-		for (int j = 0; j < neuronsPerLayer[0]; j++) {
-			weights[j][j] = eduBase[i][j];
-			expected = eduBase[i][j + 1];
+	for (int i = 0; i < 100; i++) {
+		int k = rand() % 4 + 0;
+		cout << "epoch #" << i << "\t" << "Enter inputs:" << "k = " << k << "\n";
+		for (int j = 0; j < neuronsPerLayer[0]; j++) {				// сделать рандомно
+			weights[j][j] = eduBase[k][j];
+			expected = eduBase[k][j + 1];
 		}
-		weights = learning(weights, neuronsPerLayer, layersNum, expected);
+		weights = cycle(weights, neuronsPerLayer, layersNum, expected);
 		writeToFile("weights.txt", weights, neuronsNum);
 
 	}
