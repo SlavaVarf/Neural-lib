@@ -10,15 +10,16 @@ void main() {
 	double **weights;
 	neuronsNum = neuronsCounter(neuronsPerLayer, layersNum);
 	weights = matrixCreation(neuronsPerLayer, layersNum);
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 1000000; i++) {
 		int k = rand() % 4 + 0;
 		int j = 0;
-		cout << "epoch #" << i << "\t" << "Enter inputs:" << "k = " << k << "\n";
+	//	cout << "epoch #" << i << "\t" << "Enter inputs:" << "k = " << k << "\n";
 		for (j = 0; j < neuronsPerLayer[0]; j++)				// сделать рандомно
 			weights[j][j] = eduBase[k][j];
-		expected = eduBase[k][j + 1];
+		expected = eduBase[k][j];
 		weights = cycle(weights, neuronsPerLayer, layersNum, expected);
 	}
+	for(int k = 0; k < 4; k++)
 	exploitation(weights, neuronsPerLayer, layersNum);
 
 	system("pause");
