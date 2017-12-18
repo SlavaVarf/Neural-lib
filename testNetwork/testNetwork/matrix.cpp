@@ -38,7 +38,7 @@ void writeToFile(string fileName, double **matrix, int neuronsNum) {  //запи
 	}
 	file.close();
 
-}
+};
 
 int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,считающая и возвращающая общее кол-во нейронов.
 	int neuronsNum = 0;
@@ -83,14 +83,16 @@ double **backWay(double**weights, double actual, double expected, int layersNum,
 	weights_delta_last(actual, expected);
 	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
 		weights[layerStart[layersNum - 1]][i] = new_weight_last(weights[i][i], weights[layerStart[layersNum - 1]][i]); //можно загнать в цикл снизу?
-		double error;
-		for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
-			error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
-			for (int k = layersNum - 2; k > 0; k--)
-				for (int m = layerStart[k]; m < layerStart[k + 1]; m++)
-					for (int j = layerStart[k - 1]; j < layerStart[k]; j++)
-						weights[m][j] = new_weight(weights[m][m], weights[m][j], error);
-		}
+	}
+
+	double error;
+
+	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
+		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
+		for (int k = layersNum - 2; k > 0; k--)
+			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)
+				for (int j = layerStart[k - 1]; j < layerStart[k]; j++)
+					weights[m][j] = new_weight(weights[m][m], weights[m][j], error);
 	}
 	return weights;
 
@@ -118,9 +120,9 @@ void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 }
 
 double sigm(double x) {
-//	cout << "prev " << x << "\n";
+	//cout << "prev " << x << "\n";
 	double sigm = (1 / (1 + exp(-x)));
-//	cout << "aft " << sigm << "\n";
+	//cout << "aft " << sigm << "\n";
 	return sigm;
 }
 
