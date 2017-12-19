@@ -25,7 +25,7 @@ double ** matrixCreation(int* neuronsPerLayer, int layersNum) {
 			for (int j = layerStart[i + 1]; j < layerStart[i + 1] + neuronsPerLayer[i + 1]; j++)
 				weights[j][k] = (double)rand() / (RAND_MAX + 1) * (1 - 0) + 0;
 	writeToFile("weights.txt", weights, neuronsNum);
-
+	delete[]layerStart;
 	return weights;
 }
 
@@ -60,6 +60,7 @@ double ** cycle(double** weights, int* neuronsPerLayer, int layersNum) {     //Ð
 			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
+	delete[]layerStart;
 	return weights;
 }
 
@@ -76,6 +77,7 @@ double ** cycle(double** weights, int* neuronsPerLayer, int layersNum, double ex
 		}
 	}
 	weights = backWay(weights, weights[layerStart[layersNum-1]][layerStart[layersNum-1]], expected, layersNum, layerStart);
+	delete[]layerStart;
 	return weights;
 }
 
@@ -107,14 +109,15 @@ void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 	cout << "Enter 2 input value: ";
 	cin >> value2;
 	weights[1][1] = value2;
-
 	weights = cycle(weights, neuronsPerLayer, layersNum);
-
+	/*
 	int expected = 0;
 	if ((value1 == 1) || (value2 == 1)) {
 		expected = 1;
+
 	}
 	cout << "Expexted answer: " << expected << endl;
+	*/	
 	cout << "val: " << weights[5][5] << endl;
 	cout << "Actual answer: " << answer(weights[5][5]) << endl;
 }
