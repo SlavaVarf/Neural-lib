@@ -48,7 +48,7 @@ int neuronsCounter(int* neuronsPerLayer, int layersNum) {  //ф-ия,счита�
 	return neuronsNum;
 }
 
-double ** cycle(double** weights, int* neuronsPerLayer, int layersNum) {     //прямой проход
+double ** straightPass(double** weights, int* neuronsPerLayer, int layersNum) {     //прямой проход
 	int *layerStart = new int[layersNum];
 	layerStart[0] = 0;
 	for (int i = 1; i < layersNum; i++) {
@@ -64,7 +64,7 @@ double ** cycle(double** weights, int* neuronsPerLayer, int layersNum) {     //�
 	return weights;
 }
 
-double ** cycle(double** weights, int* neuronsPerLayer, int layersNum, double expected) {     //прямой проход
+double ** training(double** weights, int* neuronsPerLayer, int layersNum, double expected) {     //прямой проход
 	int *layerStart = new int[layersNum];
 	layerStart[0] = 0;
 	for (int i = 1; i < layersNum; i++) {
@@ -76,25 +76,25 @@ double ** cycle(double** weights, int* neuronsPerLayer, int layersNum, double ex
 			weights[layerStart[i] + k][layerStart[i] + k] = sigm(weights[layerStart[i] + k][layerStart[i] + k]);
 		}
 	}
-	weights = backWay(weights, weights[layerStart[layersNum-1]][layerStart[layersNum-1]], expected, layersNum, layerStart);
+	weights = backWay(weights, weights[layerStart[layersNum - 1]][layerStart[layersNum - 1]], expected, layersNum, layerStart);
 	delete[]layerStart;
 	return weights;
 }
 
 double **backWay(double**weights, double actual, double expected, int layersNum, int* layerStart) {
-	weights_delta_last(actual, expected);
+	wDeltaOfLastLayer(actual, expected);
 	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
-		weights[layerStart[layersNum - 1]][i] = new_weight_last(weights[i][i], weights[layerStart[layersNum - 1]][i]); //можно загнать в цикл снизу?
+		weights[layerStart[layersNum - 1]][i] = newWeightOfLastLayer(weights[i][i], weights[layerStart[layersNum - 1]][i]); //можно загнать в цикл снизу?
 	}
 
 	double error;
 
 	for (int i = layerStart[layersNum - 2]; i < layerStart[layersNum - 1]; i++) {
-		error = error_of_neu(weights[layerStart[layersNum - 1]][i]);
+		error = errorOfNeuron(weights[layerStart[layersNum - 1]][i]);
 		for (int k = layersNum - 2; k > 0; k--)
 			for (int m = layerStart[k]; m < layerStart[k + 1]; m++)
 				for (int j = layerStart[k - 1]; j < layerStart[k]; j++)
-					weights[m][j] = new_weight(weights[m][m], weights[m][j], error);
+					weights[m][j] = newWeight(weights[m][m], weights[m][j], error);
 	}
 	return weights;
 
@@ -109,7 +109,7 @@ void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 	cout << "Enter 2 input value: ";
 	cin >> value2;
 	weights[1][1] = value2;
-	weights = cycle(weights, neuronsPerLayer, layersNum);
+	weights = straightPass(weights, neuronsPerLayer, layersNum);
 	/*
 	int expected = 0;
 	if ((value1 == 1) || (value2 == 1)) {
@@ -117,7 +117,7 @@ void exploitation(double** weights, int* neuronsPerLayer, int layersNum) {
 
 	}
 	cout << "Expexted answer: " << expected << endl;
-	*/	
+	*/
 	cout << "val: " << weights[5][5] << endl;
 	cout << "Actual answer: " << answer(weights[5][5]) << endl;
 }
