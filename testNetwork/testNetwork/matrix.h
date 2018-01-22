@@ -7,7 +7,7 @@ struct matrix {
 };
 int neuronsCounter(struct matrix mtrx);
 double ** matrixCreation(struct matrix mtrx);
-void writeToFile(string fileName, double **matrix, int neuronsNum);
+void writeToFile(string fileName, struct matrix mtrx);
 double ** training(struct matrix mtrx, double expected);
 double ** straightPass(struct matrix mtrx);
 double **backWay(struct matrix mtrx, double actual, double expected, int* layerStart);

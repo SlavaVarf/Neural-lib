@@ -30,11 +30,11 @@ double ** matrixCreation(struct matrix mtrx) {
 	return weights;
 }
 /*Запись матрицы в файл*/
-void writeToFile(string fileName, double **matrix, int neuronsNumber) {
+void writeToFile(string fileName, struct matrix mtrx) {
 	ofstream file(fileName);
-	for (int i = 0; i < neuronsNumber; i++) {		//перебор строк матрицы
+	for (int i = 0; i < mtrx.neuronsNumber; i++) {		//перебор строк матрицы
 		for (int j = 0; j < i + 1; j++)				//перебор элементов строки 
-			file << fixed << matrix[i][j] << "\t";	//копирование элемента в файл в фиксированном виде
+			file << fixed << mtrx.weights[i][j] << "\t";	//копирование элемента в файл в фиксированном виде
 		file << "\n";
 	}
 	file.close();

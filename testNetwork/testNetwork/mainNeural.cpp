@@ -44,7 +44,7 @@ void main() {
 			}
 		}
 	}
-	//writeToFile("weights.txt", weights, neuronsNum);							//запись в файл
+	writeToFile("weights.txt", mtrx);							//запись в файл
 	cout << "\nTraining completed\n";
 	for (int k = 0; k < 4; k++)													//тестирование пользователем
 		test(mtrx);
