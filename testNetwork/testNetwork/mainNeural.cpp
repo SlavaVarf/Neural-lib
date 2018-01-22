@@ -5,45 +5,37 @@
 #include "mainNeural.h"
 #include "matrix.h"
 
-
-
 void main() {
-
 	matrix mtrx;
-
-	//mtrx.weights = new double*[6];
 	int epochNumber = 5000;
 	bool isComplete = false;
-	//int neuronsPerLayer[3] = { 2,3,1 };
 	int trainingSet[4][3] = { { 1,0,1 },{ 1,1,0 },{ 0,1,1 },{ 0,0,0 } };
 	double expected;
-	//int layersNumber = 3, neuronsNumber = 0;
-	//double **weights;
-	mtrx.neuronsNumber = neuronsCounter(mtrx);
+	mtrx.neuronsNumber = neuronsCounter(mtrx);									//подсчёт количества нейронов нейросети
 	cout << "Below will display the number of passed tests. Begin?\n";
 	system("pause");
-	while (!isComplete) {
-		mtrx.weights = matrixCreation(mtrx);
+	while (!isComplete) {														//пока проверка не пройдена
+		mtrx.weights = matrixCreation(mtrx);									//создание матрицы весов
 		for (int i = 0; i < epochNumber; i++) {									//обучение нейронной сети
 			for (int k = 0; k < 4; k++) {										//перебор элементов выборки
 				int j = 0;
-				for (j = 0; j < mtrx.neuronsPerLayer[0]; j++)						//заполнение входного слоя
+				for (j = 0; j < mtrx.neuronsPerLayer[0]; j++)					//заполнение входного слоя
 					mtrx.weights[j][j] = trainingSet[k][j];
 				expected = trainingSet[k][j];
-				mtrx.weights = training(mtrx, expected);
+				mtrx.weights = training(mtrx, expected);						//обучение
 				if (i % 25 == 0) {												//проверка на работоспособность 
 					int counter = 0;											//во время обучения
-					for (int k = 0; k < 4; k++) {
+					for (int k = 0; k < 4; k++) {								//перебор наборов из обучающей базы
 						int j = 0;
-						for (j = 0; j < mtrx.neuronsPerLayer[0]; j++)				//заполнение входного слоя
+						for (j = 0; j < mtrx.neuronsPerLayer[0]; j++)			//заполнение входного слоя данными для обучения
 							mtrx.weights[j][j] = trainingSet[k][j];
 						expected = trainingSet[k][j];
 						mtrx.weights = training(mtrx, expected);
-						if (answer(mtrx.weights[5][5]) == expected)					//проверка на соответствие значения в выборке
+						if (answer(mtrx.weights[5][5]) == expected)				//проверка на соответствие ожидаемого и полученного значения
 							counter++;
 					}
 					cout << counter << "\t";
-					if (counter == 4) {											//результаты выборки
+					if (counter == 4) {											//количество пройденных проверок
 						isComplete = true;
 						i = epochNumber;
 						cout << endl;
@@ -52,7 +44,7 @@ void main() {
 			}
 		}
 	}
-	//writeToFile("weights.txt", weights, neuronsNum);
+	//writeToFile("weights.txt", weights, neuronsNum);							//запись в файл
 	cout << "\nTraining completed\n";
 	for (int k = 0; k < 4; k++)													//тестирование пользователем
 		test(mtrx);
